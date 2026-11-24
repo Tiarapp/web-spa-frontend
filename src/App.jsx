@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowDown, ArrowRight, Award, Box, Check, ChevronRight, CircleCheck, Factory, Globe2, Layers3, Leaf, Menu, PackageCheck, Recycle, ShoppingCart, Smartphone, UtensilsCrossed, X, Zap } from 'lucide-react'
+import { ArrowDown, ArrowRight, Award, Box, Check, ChevronRight, CircleCheck, Factory, Globe2, Layers3, Leaf, Menu, PackageCheck, Recycle, ShieldCheck, ShoppingCart, Smartphone, UtensilsCrossed, X, Zap } from 'lucide-react'
 
 const icons = [Award, Factory, Layers3, Globe2]
 const currentYear = new Date().getFullYear()
@@ -35,7 +35,7 @@ function App() {
   if (error) return <div className="state-message">Website content could not be loaded. Please try again later.</div>
   if (!content) return <div className="state-message">Loading...</div>
 
-  const { company, hero, products_intro: intro, products, stats, technology, sustainability, industries: industryContent, contact } = content
+  const { company, hero, products_intro: intro, products, stats, technology, sustainability, core_labour: coreLabour, industries: industryContent, contact } = content
   const emailLink = `mailto:${company.email}?subject=${encodeURIComponent('Packaging inquiry')}`
 
   return (
@@ -88,12 +88,17 @@ function App() {
 
         <section className="sustainability" id="sustainability"><div className="sustain-image" style={{ backgroundImage: `url("${sustainability.image_url}")` }}><div className="sustain-stamp"><Recycle size={31} strokeWidth={1.3} /><span>BETTER BY<br />NATURE</span></div></div><div className="sustain-content"><div className="eyebrow"><span />{sustainability.eyebrow}</div><h2>{sustainability.title}</h2><p>{sustainability.description}</p><div className="sustain-features"><div><Leaf /><strong>Renewable resources</strong><span>Thoughtful materials, responsibly sourced.</span></div><div><Recycle /><strong>Recyclable packaging</strong><span>Designed with a circular future in mind.</span></div><div><Zap /><strong>Energy conscious</strong><span>Always improving how we produce.</span></div></div></div></section>
 
+        {coreLabour && <section className="labour section" id="core-labour"><div className="container labour-inner">
+          <div className="labour-copy"><div className="eyebrow"><span />{coreLabour.eyebrow}</div><h2>{coreLabour.title}</h2><p>{coreLabour.description}</p></div>
+          <ul className="labour-list">{[coreLabour.freedom_of_association, coreLabour.forced_labour, coreLabour.child_labour, coreLabour.equal_opportunity, coreLabour.safe_workplace].map((item, index) => <li key={index}><ShieldCheck size={22} strokeWidth={1.5} /><span>{item}</span></li>)}</ul>
+        </div></section>}
+
         <section className="industries section" id="industries"><div className="container industries-inner"><div><div className="eyebrow"><span />{industryContent.eyebrow}</div><h2>{industryContent.title}</h2><p>{industryContent.description}</p></div><div className="industry-list">{industries.map(({ name, icon: Icon }) => <div key={name}><Icon size={30} strokeWidth={1.2} /><span>{name}</span></div>)}</div></div></section>
 
         <section className="contact" id="contact"><div className="container contact-inner"><div><div className="eyebrow light"><span />{contact.eyebrow}</div><h2>{contact.title}</h2><p>{contact.description}</p></div><a className="button button-gold" href={emailLink}>Start a conversation <ArrowRight size={18} /></a><div className="contact-points"><span><Check size={15} /> Fast response</span><span><Check size={15} /> Custom solutions</span><span><Check size={15} /> Reliable quality</span></div></div></section>
       </main>
 
-      <footer className="footer"><div className="container"><div className="footer-grid"><div className="footer-brand"><Logo name={company.name} /><p>{company.description}</p></div><div><h4>EXPLORE</h4><a href="#about">About us</a><a href="#products">Our products</a><a href="#technology">Technology</a><a href="#sustainability">Sustainability</a></div><div><h4>OUR PRODUCTS</h4>{products.map(product => <a key={product.name} href="#products">{product.name}</a>)}</div><div><h4>GET IN TOUCH</h4><a href={`mailto:${company.email}`}>{company.email}</a><a href={`tel:${company.phone.replace(/[^+\d]/g, '')}`}>{company.phone}</a><span>{company.location}</span></div><div><h4>LET'S CONNECT</h4><a className="footer-contact" href={emailLink}>Start a conversation <ChevronRight size={15} /></a></div></div><div className="footer-bottom"><span>© {currentYear} {company.name}. All rights reserved.</span><span>MADE TO PROTECT WHAT MATTERS <PackageCheck size={15} /></span></div></div></footer>
+      <footer className="footer"><div className="container"><div className="footer-grid"><div className="footer-brand"><Logo name={company.name} /><p>{company.description}</p></div><div><h4>EXPLORE</h4><a href="#about">About us</a><a href="#products">Our products</a><a href="#technology">Technology</a><a href="#sustainability">Sustainability</a>{coreLabour && <a href="#core-labour">Core Labour Standards</a>}</div><div><h4>OUR PRODUCTS</h4>{products.map(product => <a key={product.name} href="#products">{product.name}</a>)}</div><div><h4>GET IN TOUCH</h4><a href={`mailto:${company.email}`}>{company.email}</a><a href={`tel:${company.phone.replace(/[^+\d]/g, '')}`}>{company.phone}</a><span>{company.location}</span></div><div><h4>LET'S CONNECT</h4><a className="footer-contact" href={emailLink}>Start a conversation <ChevronRight size={15} /></a></div></div><div className="footer-bottom"><span>© {currentYear} {company.name}. All rights reserved.</span><span>MADE TO PROTECT WHAT MATTERS <PackageCheck size={15} /></span></div></div></footer>
     </>
   )
 }
