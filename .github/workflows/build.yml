@@ -1,0 +1,52 @@
+name: Build frontend
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: frontend-build
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Build website
+        run: npm run build -- --outDir "$RUNNER_TEMP/frontend-dist"
+        env:
+          VITE_API_BASE_URL: https://admin.saranapackaging.com
+      - name: Publish build branch
+        run: |
+          if git ls-remote --exit-code --heads origin refs/heads/deploy-build > /dev/null; then
+            git fetch origin deploy-build
+            git switch --detach FETCH_HEAD
+          else
+            status=$?
+            if [ "$status" -ne 2 ]; then
+              exit "$status"
+            fi
+            git switch --orphan deploy-build
+          fi
+
+          git ls-files -z | xargs -0 -r git rm -f --
+          cp -a "$RUNNER_TEMP/frontend-dist/." .
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Build unchanged"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update frontend build"
+          git push origin HEAD:refs/heads/deploy-build

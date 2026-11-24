@@ -1,5 +1,16 @@
 # React + Vite
 
+## Build deployment
+
+Setiap push ke `main` menjalankan GitHub Actions untuk membangun frontend dengan
+API `https://admin.saranapackaging.com` dan menyimpan hasilnya di branch
+`deploy-build`. Workflow juga dapat dijalankan secara manual dari tab Actions.
+Repository harus mengizinkan GitHub Actions menulis isi repository. Branch ini
+hanya berisi hasil build; jangan menyimpan perubahan manual di sana.
+
+Workflow ini belum memasang file ke hosting. Pengambilan hasil build oleh
+hosting perlu dikonfigurasi dan diverifikasi secara terpisah.
+
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
 Currently, two official plugins are available:
