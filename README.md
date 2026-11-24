@@ -8,8 +8,10 @@ API `https://admin.saranapackaging.com` dan menyimpan hasilnya di branch
 Repository harus mengizinkan GitHub Actions menulis isi repository. Branch ini
 hanya berisi hasil build; jangan menyimpan perubahan manual di sana.
 
-Workflow ini belum memasang file ke hosting. Pengambilan hasil build oleh
-hosting perlu dikonfigurasi dan diverifikasi secara terpisah.
+Di hosting Rumahweb, Cron Job memeriksa branch tersebut setiap 10 menit dan
+memasang build yang berubah. Log tersimpan di
+`~/sarana-frontend-deploy.log`. Pembaruan konten dari dashboard Laravel tidak
+memerlukan build frontend; deployment backend diatur secara terpisah.
 
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
